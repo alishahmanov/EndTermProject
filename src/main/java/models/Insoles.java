@@ -9,8 +9,29 @@ public class Insoles extends Products {
         this.material = material;
         this.type = type;
     }
+
+    public Insoles() {
+        super();
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
     @Override
     public String toString() {
-        return "Insoles: \n" + "Type of insoles: "+ type + "\nMaterial: " +  material  + "\nPrice: " + price + "\nAvailability: " + availability+ "\n";
+        return "Insoles: \n" + "Type of insoles: "+ type + "\nMaterial: " +  material  + "\nPrice: " +  getPrice() + "\nAvailability: " + getAvailability() + "\n";
     }
 }

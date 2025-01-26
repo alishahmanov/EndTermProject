@@ -7,34 +7,18 @@ public class Shoes extends Products {
     private String seasonOfShoes;
     private boolean gender;
 
-    public Shoes(boolean gender, String brand,  String material, String seasonOfShoes,String color,  int size,  int price, String availability) {
+    public Shoes() {
+        super();
+    }
+
+    public Shoes(boolean gender, String brand, String material, String seasonOfShoes, String color, int size, int price, String availability) {
         super(size, price, availability);
-        this.price = price;
         this.brand = brand;
         this.material = material;
         this.color = color;
         this.seasonOfShoes = seasonOfShoes;
-        this.availability = availability;
         this.gender = gender;
-
     }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
 
     public String getBrand() {
         return brand;
@@ -68,25 +52,20 @@ public class Shoes extends Products {
         this.seasonOfShoes = seasonOfShoes;
     }
 
-    public String getAvailability() {
-        return availability;
-    }
-    public void setAvailability(String availability) {
-        this.availability = availability;
-    }
-
     public boolean isGender() {
         return gender;
     }
+
     public void setGender(boolean gender) {
         this.gender = gender;
     }
 
+
     @Override
     public String toString() {
-        if (gender == true) {
-            return "Pair of shoes:\n" + "Gender: Male" + "\nBrand: " + brand + "\nMaterial: " + material + "\nColor: " + color + "\nSeason of shoes: " + seasonOfShoes + "\nSize: " + size + "\nPrice: " + price + "\nAvailability: " + availability+ "\n";}
+        if (gender) {
+            return "Pair of shoes:\n" + "Gender: Male" + "\nBrand: " + brand + "\nMaterial: " + material + "\nColor: " + color + "\nSeason of shoes: " + seasonOfShoes + "\nSize: " + getSize() + "\nPrice: " + getPrice() + "\nAvailability: " + getAvailability() + "\n";}
         else{
-            return "Pair of shoes:\n" + "Gender: Female" + "\nBrand: " + brand + "\nMaterial: " + material + "\nColor: " + color + "\nSeason of shoes: " + seasonOfShoes + "\nSize: " + size + "\nPrice: " + price + "\nAvailability: " + availability+ "\n";}
+            return "Pair of shoes:\n" + "Gender: Female" + "\nBrand: " + brand + "\nMaterial: " + material + "\nColor: " + color + "\nSeason of shoes: " + seasonOfShoes + "\nSize: " + getSize() + "\nPrice: " + getPrice() + "\nAvailability: " + getAvailability() + "\n";}
     }
 }

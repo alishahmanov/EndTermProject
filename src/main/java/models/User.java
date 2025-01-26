@@ -1,8 +1,19 @@
 package models;
 
 public abstract class User {
-    String name;
-    String email;
+    private String name;
+    private String email;
+
+    public User() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     public User(String name, String email) {
         this.name = name;
