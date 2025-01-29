@@ -13,11 +13,11 @@ public class Shoes extends Products {
 
     public Shoes(boolean gender, String brand, String material, String seasonOfShoes, String color, int size, int price, String availability) {
         super(size, price, availability);
-        this.brand = brand;
-        this.material = material;
-        this.color = color;
-        this.seasonOfShoes = seasonOfShoes;
-        this.gender = gender;
+        setBrand(brand);
+        setMaterial(material);
+        setSeasonOfShoes(seasonOfShoes);
+        setGender(gender);
+        setColor(color);
     }
 
     public String getBrand() {
