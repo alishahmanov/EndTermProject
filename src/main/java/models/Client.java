@@ -9,11 +9,18 @@ public class Client extends User {
         super();
     }
 
-    public Client(String name, String email, boolean gender, int size, int amountOfMoney) {
-        super(name, email);
+    public Client(String name, String email, String password, boolean gender, int size, int amountOfMoney) {
+        super(name, email, password);
         setSize(size);
-        setAmountOfMoney(amountOfMoney);
         setGender(gender);
+        setAmountOfMoney(amountOfMoney);
+    }
+
+    public Client(String name, String email, String password, boolean gender, int size) {
+        super(name, email, password);
+        setSize(size);
+        setGender(gender);
+        this.amountOfMoney = 0;
     }
 
     public int getAmountOfMoney() {

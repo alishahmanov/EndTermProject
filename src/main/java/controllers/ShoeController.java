@@ -46,6 +46,6 @@ public class ShoeController implements IShoeController {
     public String getShoe(int id) {
         Shoes shoe = repo.getShoe(id);
 
-        return (shoe == null ? "Sneaker was not found!" : shoe.toString());
+        return (shoe == null ? "Sneaker was not found" : shoe.toString());
     }
 }

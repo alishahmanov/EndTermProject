@@ -8,8 +8,8 @@ public class Supplier extends User {
         super();
     }
 
-    public Supplier(String brandofshoes, String countryOfOrigin, String name, String email, int deliveryCost) {
-        super(name, email);
+    public Supplier(String brandofshoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
+        super(name, email, password);
        setBrandofshoes(brandofshoes);
        setCountryOfOrigin(countryOfOrigin);
        setDeliveryCost(deliveryCost);

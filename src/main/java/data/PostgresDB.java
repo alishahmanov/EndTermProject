@@ -15,7 +15,6 @@ public class PostgresDB implements IDB {
 
         Connection con = DriverManager.getConnection(connectionUrl, user, password);
         if (con != null) {
-            System.out.println("Success!");
             return con;
         } else {
             throw new SQLException("Failed to establish a database connection.");
