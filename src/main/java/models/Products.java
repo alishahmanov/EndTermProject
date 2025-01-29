@@ -8,6 +8,12 @@ public abstract class Products {
     public Products() {
     }
 
+    public Products(int size, int price, String availability) {
+        setSize(size);
+        setPrice(price);
+        setAvailability(availability);
+    }
+
     public int getSize() {
         return size;
     }
@@ -20,9 +26,15 @@ public abstract class Products {
         return availability;
     }
 
-    public Products(int size, int price, String availability) {
+    public void setSize(int size) {
         this.size = size;
+    }
+
+    public void setPrice(int price) {
         this.price = price;
+    }
+
+    public void setAvailability(String availability) {
         this.availability = availability;
     }
 }

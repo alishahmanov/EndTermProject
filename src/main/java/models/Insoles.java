@@ -4,15 +4,16 @@ public class Insoles extends Products {
     private String material;
     private String type;
 
-    public Insoles(String type, String material, int size, int price, String availability) {
-        super(size, price,availability);
-        this.material = material;
-        this.type = type;
-    }
-
     public Insoles() {
         super();
     }
+
+    public Insoles(String type, String material, int size, int price, String availability) {
+        super(size, price, availability);
+        setMaterial(material);
+        setType(type);
+    }
+
 
     public String getType() {
         return type;
