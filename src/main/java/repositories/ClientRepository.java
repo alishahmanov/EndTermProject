@@ -7,6 +7,7 @@ import repositories.interfaces.IClientRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientRepository implements IClientRepository {
     private final IDB db;
@@ -16,31 +17,30 @@ public class ClientRepository implements IClientRepository {
     }
 
     @Override
-    public Client findByEmail(String email) {
+    public Optional<Client> findByEmail(String email) {
         String sql = "SELECT * FROM clients WHERE email = ?";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setString(1, email);
-
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return new Client(
+                return Optional.of(new Client(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getBoolean("gender"),
                         rs.getInt("size"),
                         rs.getInt("amountofmoney")
-                );
+                ));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error:" + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
 
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -53,18 +53,17 @@ public class ClientRepository implements IClientRepository {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                Client client = new Client(
+                clients.add(new Client(
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getBoolean("gender"),
                         rs.getInt("size"),
                         rs.getInt("amountofmoney")
-                );
-                clients.add(client);
+                ));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error" + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
 
         return clients;
@@ -84,12 +83,9 @@ public class ClientRepository implements IClientRepository {
             st.setInt(5, client.getSize());
             st.setInt(6, client.getAmountOfMoney());
 
-            st.executeUpdate();
-            return true;
+            return st.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error while adding client: " + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
-
-        return false;
     }
 }

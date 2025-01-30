@@ -1,9 +1,11 @@
 package repositories.interfaces;
+
 import models.Shoes;
 import java.util.List;
+import java.util.Optional;
 
 public interface IShoesRepository {
-    boolean addShoe(Shoes shoe);
-    Shoes getShoe(int id);
+    Optional<Shoes> getShoe(int id);
     List<Shoes> getAllShoes();
+    boolean addShoe(Shoes shoe);
 }
