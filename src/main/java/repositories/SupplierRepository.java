@@ -7,6 +7,7 @@ import repositories.interfaces.ISupplierRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SupplierRepository implements ISupplierRepository {
     private final IDB db;
@@ -16,31 +17,30 @@ public class SupplierRepository implements ISupplierRepository {
     }
 
     @Override
-    public Supplier findByEmail(String email) {
+    public Optional<Supplier> findByEmail(String email) {
         String sql = "SELECT * FROM suppliers WHERE email = ?";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setString(1, email);
-
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return new Supplier(
+                return Optional.of(new Supplier(
                         rs.getString("brandofshoes"),
                         rs.getString("countryoforigin"),
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getInt("deliverycost"),
                         rs.getString("password")
-                );
+                ));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error while finding supplier by email: " + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
 
-        return null;
+        return Optional.empty();
     }
 
     @Override
@@ -53,18 +53,17 @@ public class SupplierRepository implements ISupplierRepository {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                Supplier supplier = new Supplier(
+                suppliers.add(new Supplier(
                         rs.getString("brandofshoes"),
                         rs.getString("countryoforigin"),
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getInt("deliverycost"),
                         rs.getString("password")
-                );
-                suppliers.add(supplier);
+                ));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error while fetching all suppliers: " + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
 
         return suppliers;
@@ -84,12 +83,9 @@ public class SupplierRepository implements ISupplierRepository {
             st.setInt(5, supplier.getDeliveryCost());
             st.setString(6, supplier.getPassword());
 
-            st.executeUpdate();
-            return true;
+            return st.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error while adding supplier: " + e.getMessage());
+            throw new RuntimeException("Database error: " + e.getMessage());
         }
-
-        return false;
     }
 }
