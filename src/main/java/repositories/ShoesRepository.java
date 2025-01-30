@@ -1,4 +1,5 @@
 package repositories;
+import models.enums.*;
 
 import data.interfaces.IDB;
 import models.Shoes;
@@ -27,16 +28,31 @@ public class ShoesRepository implements IShoesRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(new Shoes(
-                        rs.getBoolean("gender"),
-                        rs.getString("brand"),
-                        rs.getString("material"),
-                        rs.getString("season_of_shoes"),
-                        rs.getString("color"),
-                        rs.getInt("size"),
-                        rs.getInt("price"),
-                        rs.getString("availability")
-                ));
+                boolean gender = rs.getBoolean("gender");
+                String brand = rs.getString("brand");
+                String materialStr = rs.getString("material");
+                String seasonStr = rs.getString("season_of_shoes");
+                String color = rs.getString("color");
+                int size = rs.getInt("size");
+                int price = rs.getInt("price");
+                String availabilityStr = rs.getString("availability");
+
+                Material material = Material.valueOf(materialStr);
+                Season season = Season.valueOf(seasonStr);
+                Availability availability = Availability.valueOf(availabilityStr);
+
+                Shoes shoe = new Shoes(
+                        gender,
+                        brand,
+                        material,
+                        season,
+                        color,
+                        size,
+                        price,
+                        availability
+                );
+
+                return Optional.of(shoe);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
@@ -44,6 +60,7 @@ public class ShoesRepository implements IShoesRepository {
 
         return Optional.empty();
     }
+
 
     @Override
     public List<Shoes> getAllShoes() {
@@ -55,16 +72,31 @@ public class ShoesRepository implements IShoesRepository {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                shoesList.add(new Shoes(
-                        rs.getBoolean("gender"),
-                        rs.getString("brand"),
-                        rs.getString("material"),
-                        rs.getString("season_of_shoes"),
-                        rs.getString("color"),
-                        rs.getInt("size"),
-                        rs.getInt("price"),
-                        rs.getString("availability")
-                ));
+                boolean gender = rs.getBoolean("gender");
+                String brand = rs.getString("brand");
+                String materialStr = rs.getString("material");
+                String seasonStr = rs.getString("season_of_shoes");
+                String color = rs.getString("color");
+                int size = rs.getInt("size");
+                int price = rs.getInt("price");
+                String availabilityStr = rs.getString("availability");
+
+                Material material = Material.valueOf(materialStr);
+                Season season = Season.valueOf(seasonStr);
+                Availability availability = Availability.valueOf(availabilityStr);
+
+                Shoes shoe = new Shoes(
+                        gender,
+                        brand,
+                        material,
+                        season,
+                        color,
+                        size,
+                        price,
+                        availability
+                );
+
+                shoesList.add(shoe);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
@@ -83,16 +115,17 @@ public class ShoesRepository implements IShoesRepository {
 
             st.setBoolean(1, shoe.isGender());
             st.setString(2, shoe.getBrand());
-            st.setString(3, shoe.getMaterial());
-            st.setString(4, shoe.getSeasonOfShoes());
+            st.setString(3, shoe.getMaterial().name());
+            st.setString(4, shoe.getSeasonOfShoes().name());
             st.setString(5, shoe.getColor());
             st.setInt(6, shoe.getSize());
             st.setInt(7, shoe.getPrice());
-            st.setString(8, shoe.getAvailability());
+            st.setString(8, shoe.getAvailability().name());
 
             return st.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
         }
     }
+
 }

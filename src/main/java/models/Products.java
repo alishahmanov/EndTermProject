@@ -1,14 +1,15 @@
 package models;
+import models.enums.Availability;
 
 public abstract class Products {
     private int size;
     private int price;
-    private String availability;
+    private Availability availability;
 
     public Products() {
     }
 
-    public Products(int size, int price, String availability) {
+    public Products(int size, int price, Availability availability) {
         setSize(size);
         setPrice(price);
         setAvailability(availability);
@@ -22,7 +23,7 @@ public abstract class Products {
         return price;
     }
 
-    public String getAvailability() {
+    public Availability getAvailability() {
         return availability;
     }
 
@@ -34,7 +35,7 @@ public abstract class Products {
         this.price = price;
     }
 
-    public void setAvailability(String availability) {
+    public void setAvailability(Availability availability) {
         this.availability = availability;
     }
 }

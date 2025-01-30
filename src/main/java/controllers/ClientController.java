@@ -1,5 +1,4 @@
 package controllers;
-
 import exceptions.ClientNotFoundException;
 import models.Client;
 import controllers.interfaces.IClientController;
@@ -45,10 +44,9 @@ public class ClientController implements IClientController {
     }
 
     public String getClientByEmail(String email) {
-        Client client = repo.findByEmail(email);
-        if (client == null) {
-            throw new ClientNotFoundException(email);
-        }
-        return client.toString();
+        return repo.findByEmail(email)
+                .map(Client::toString)
+                .orElseThrow(() -> new ClientNotFoundException(email));
     }
+
 }

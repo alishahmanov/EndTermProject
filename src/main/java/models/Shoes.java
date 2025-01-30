@@ -1,17 +1,20 @@
 package models;
+import models.enums.Material;
+import models.enums.Season;
+import models.enums.Availability;
 
 public class Shoes extends Products {
     private String brand;
-    private String material;
+    private Material material;
     private String color;
-    private String seasonOfShoes;
+    private Season seasonOfShoes;
     private boolean gender;
 
     public Shoes() {
         super();
     }
 
-    public Shoes(boolean gender, String brand, String material, String seasonOfShoes, String color, int size, int price, String availability) {
+    public Shoes(boolean gender, String brand, Material material, Season seasonOfShoes, String color, int size, int price, Availability availability) {
         super(size, price, availability);
         setBrand(brand);
         setMaterial(material);
@@ -28,11 +31,11 @@ public class Shoes extends Products {
         this.brand = brand;
     }
 
-    public String getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(Material material) {
         this.material = material;
     }
 
@@ -44,11 +47,11 @@ public class Shoes extends Products {
         this.color = color;
     }
 
-    public String getSeasonOfShoes() {
+    public Season getSeasonOfShoes() {
         return seasonOfShoes;
     }
 
-    public void setSeasonOfShoes(String seasonOfShoes) {
+    public void setSeasonOfShoes(Season seasonOfShoes) {
         this.seasonOfShoes = seasonOfShoes;
     }
 

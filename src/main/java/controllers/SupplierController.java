@@ -1,5 +1,4 @@
 package controllers;
-
 import exceptions.SupplierNotFoundException;
 import models.Supplier;
 import controllers.interfaces.ISupplierController;
@@ -41,10 +40,9 @@ public class SupplierController implements ISupplierController {
     }
 
     public String getSupplierByEmail(String email) {
-        Supplier supplier = repo.findByEmail(email);
-        if (supplier == null) {
-            throw new SupplierNotFoundException(email);
-        }
-        return supplier.toString();
+        return repo.findByEmail(email)
+                .map(Supplier::toString)
+                .orElseThrow(() -> new SupplierNotFoundException(email));
     }
+
 }

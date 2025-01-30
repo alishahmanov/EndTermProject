@@ -3,6 +3,9 @@ package repositories;
 import data.interfaces.IDB;
 import models.Insoles;
 import repositories.interfaces.IInsolesRepository;
+import models.enums.InsoleType;
+import models.enums.Material;
+import models.enums.Availability;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,13 +30,24 @@ public class InsolesRepository implements IInsolesRepository {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(new Insoles(
-                        rs.getString("type"),
-                        rs.getString("material"),
-                        rs.getInt("size"),
-                        rs.getInt("price"),
-                        rs.getString("availability")
-                ));
+                String insoleTypeStr = rs.getString("type");
+                String materialStr = rs.getString("material");
+                int size = rs.getInt("size");
+                int price = rs.getInt("price");
+                String availabilityStr = rs.getString("availability");
+
+                InsoleType insoleType = InsoleType.valueOf(insoleTypeStr);
+                Material material = Material.valueOf(materialStr);
+                Availability availability = Availability.valueOf(availabilityStr);
+
+                Insoles insole = new Insoles(
+                        insoleType,
+                        material,
+                        size,
+                        price,
+                        availability
+                );
+                return Optional.of(insole);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
@@ -52,13 +66,18 @@ public class InsolesRepository implements IInsolesRepository {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                insolesList.add(new Insoles(
-                        rs.getString("type"),
-                        rs.getString("material"),
-                        rs.getInt("size"),
-                        rs.getInt("price"),
-                        rs.getString("availability")
-                ));
+                String insoleTypeStr = rs.getString("type");
+                String materialStr = rs.getString("material");
+                int size = rs.getInt("size");
+                int price = rs.getInt("price");
+                String availabilityStr = rs.getString("availability");
+
+                InsoleType insoleType = InsoleType.valueOf(insoleTypeStr);
+                Material material = Material.valueOf(materialStr);
+                Availability availability = Availability.valueOf(availabilityStr);
+
+                Insoles insole = new Insoles(insoleType, material, size, price, availability);
+                insolesList.add(insole);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
@@ -75,11 +94,11 @@ public class InsolesRepository implements IInsolesRepository {
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
 
-            st.setString(1, insole.getType());
-            st.setString(2, insole.getMaterial());
+            st.setString(1, insole.getType().name());
+            st.setString(2, insole.getMaterial().name());
             st.setInt(3, insole.getSize());
             st.setInt(4, insole.getPrice());
-            st.setString(5, insole.getAvailability());
+            st.setString(5, insole.getAvailability().name());
 
             return st.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {

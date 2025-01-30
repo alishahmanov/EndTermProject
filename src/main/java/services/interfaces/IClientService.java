@@ -1,0 +1,10 @@
+package services.interfaces;
+
+import models.Client;
+import java.util.List;
+
+public interface IClientService {
+    Client getClientByEmail(String email);
+    List<Client> getAllClients();
+    boolean addClient(String name, String email, String password, boolean gender, int size, int amountOfMoney);
+}

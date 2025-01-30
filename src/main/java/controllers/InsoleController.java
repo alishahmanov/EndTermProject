@@ -1,8 +1,10 @@
 package controllers;
-
 import exceptions.InsoleNotFoundException;
 import models.Insoles;
 import controllers.interfaces.IInsoleController;
+import models.enums.Availability;
+import models.enums.InsoleType;
+import models.enums.Material;
 import repositories.interfaces.IInsolesRepository;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public class InsoleController implements IInsoleController {
         this.repo = repo;
     }
 
-    public String addInsole(String type, String material, int size, int price, String availability) {
+    public String addInsole(InsoleType type, Material material, int size, int price, Availability availability) {
         if (price <= 0) {
             return "Price must be greater than 0!";
         }
@@ -45,10 +47,9 @@ public class InsoleController implements IInsoleController {
     }
 
     public String getInsole(int id) {
-        Insoles insole = repo.getInsoles(id);
-        if (insole == null) {
-            throw new InsoleNotFoundException(id);
-        }
-        return insole.toString();
+        return repo.getInsoles(id)
+                .map(Insoles::toString)
+                .orElseThrow(() -> new InsoleNotFoundException(id));
     }
+
 }
