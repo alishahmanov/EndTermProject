@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.ShoeNotFoundException;
 import models.Shoes;
 import controllers.interfaces.IShoeController;
 import repositories.interfaces.IShoesRepository;
@@ -45,7 +46,9 @@ public class ShoeController implements IShoeController {
 
     public String getShoe(int id) {
         Shoes shoe = repo.getShoe(id);
-
-        return (shoe == null ? "Sneaker was not found" : shoe.toString());
+        if (shoe == null) {
+            throw new ShoeNotFoundException(id);
+        }
+        return shoe.toString();
     }
 }

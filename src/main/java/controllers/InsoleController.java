@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.InsoleNotFoundException;
 import models.Insoles;
 import controllers.interfaces.IInsoleController;
 import repositories.interfaces.IInsolesRepository;
@@ -45,6 +46,9 @@ public class InsoleController implements IInsoleController {
 
     public String getInsole(int id) {
         Insoles insole = repo.getInsoles(id);
-        return (insole == null ? "Insole was not found" : insole.toString());
+        if (insole == null) {
+            throw new InsoleNotFoundException(id);
+        }
+        return insole.toString();
     }
 }
