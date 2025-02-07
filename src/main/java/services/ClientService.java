@@ -4,7 +4,7 @@ import exceptions.ClientNotFoundException;
 import models.Client;
 import repositories.interfaces.IClientRepository;
 import services.interfaces.IClientService;
-
+import models.enums.Role;
 import java.util.List;
 
 public class ClientService implements IClientService {
@@ -33,8 +33,11 @@ public class ClientService implements IClientService {
         if (amountOfMoney < 0) {
             throw new IllegalArgumentException("Amount of money cannot be negative!");
         }
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Invalid email format!");
+        }
 
-        Client client = new Client(name, email, password, gender, size, amountOfMoney);
+        Client client = new Client(name, email, password, Role.CLIENT, gender, size, amountOfMoney);
         return repo.addClient(client);
     }
 }

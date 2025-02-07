@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import models.enums.Role;
 
 public class ClientRepository implements IClientRepository {
     private final IDB db;
@@ -16,32 +17,12 @@ public class ClientRepository implements IClientRepository {
         this.db = db;
     }
 
-    @Override
     public Optional<Client> findByEmail(String email) {
-        String sql = "SELECT * FROM clients WHERE email = ?";
-
-        try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
-
-            st.setString(1, email);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                return Optional.of(new Client(
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getBoolean("gender"),
-                        rs.getInt("size"),
-                        rs.getInt("amountofmoney")
-                ));
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException("Database error: " + e.getMessage());
-        }
-
-        return Optional.empty();
+        return getAllClients().stream()
+                .filter(client -> client.getEmail().equals(email))
+                .findFirst();
     }
+
 
     @Override
     public List<Client> getAllClients() {
@@ -54,9 +35,11 @@ public class ClientRepository implements IClientRepository {
 
             while (rs.next()) {
                 clients.add(new Client(
+                        rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("email"),
                         rs.getString("password"),
+                        Role.valueOf(rs.getString("role").toUpperCase()),
                         rs.getBoolean("gender"),
                         rs.getInt("size"),
                         rs.getInt("amountofmoney")
@@ -79,9 +62,10 @@ public class ClientRepository implements IClientRepository {
             st.setString(1, client.getName());
             st.setString(2, client.getEmail());
             st.setString(3, client.getPassword());
-            st.setBoolean(4, client.isGender());
-            st.setInt(5, client.getSize());
-            st.setInt(6, client.getAmountOfMoney());
+            st.setString(4, client.getRole().name());
+            st.setBoolean(5, client.isGender());
+            st.setInt(6, client.getSize());
+            st.setInt(7, client.getAmountOfMoney());
 
             return st.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {

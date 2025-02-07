@@ -3,6 +3,7 @@ package repositories;
 import data.interfaces.IDB;
 import models.Supplier;
 import repositories.interfaces.ISupplierRepository;
+import models.enums.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,12 +29,14 @@ public class SupplierRepository implements ISupplierRepository {
 
             if (rs.next()) {
                 return Optional.of(new Supplier(
-                        rs.getString("brandofshoes"),
-                        rs.getString("countryoforigin"),
+                        rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("brandofshoes"),
+                        rs.getString("countryoforigin"),
                         rs.getInt("deliverycost"),
-                        rs.getString("password")
+                        Role.valueOf(rs.getString("role"))
                 ));
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -54,12 +57,14 @@ public class SupplierRepository implements ISupplierRepository {
 
             while (rs.next()) {
                 suppliers.add(new Supplier(
-                        rs.getString("brandofshoes"),
-                        rs.getString("countryoforigin"),
+                        rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("brandofshoes"),
+                        rs.getString("countryoforigin"),
                         rs.getInt("deliverycost"),
-                        rs.getString("password")
+                        Role.valueOf(rs.getString("role"))
                 ));
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -71,21 +76,31 @@ public class SupplierRepository implements ISupplierRepository {
 
     @Override
     public boolean addSupplier(Supplier supplier) {
-        String sql = "INSERT INTO suppliers(brandofshoes, countryoforigin, name, email, deliverycost, password) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO suppliers(name, email, password, brandofshoes, countryoforigin, deliverycost, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = db.getConnection();
-             PreparedStatement st = con.prepareStatement(sql)) {
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            st.setString(1, supplier.getBrandofshoes());
-            st.setString(2, supplier.getCountryOfOrigin());
-            st.setString(3, supplier.getName());
-            st.setString(4, supplier.getEmail());
-            st.setInt(5, supplier.getDeliveryCost());
-            st.setString(6, supplier.getPassword());
+            st.setString(1, supplier.getName());
+            st.setString(2, supplier.getEmail());
+            st.setString(3, supplier.getPassword());
+            st.setString(4, supplier.getBrandofshoes());
+            st.setString(5, supplier.getCountryOfOrigin());
+            st.setInt(6, supplier.getDeliveryCost());
+            st.setString(7, supplier.getRole().name()); // Теперь role правильно вставляется в таблицу
 
-            return st.executeUpdate() > 0;
+            int affectedRows = st.executeUpdate();
+            if (affectedRows > 0) {
+                ResultSet generatedKeys = st.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    supplier.setId(generatedKeys.getLong(1)); // Устанавливаем ID поставщика
+                    return true;
+                }
+            }
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
         }
+
+        return false;
     }
 }

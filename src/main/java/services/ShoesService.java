@@ -6,6 +6,7 @@ import repositories.interfaces.IShoesRepository;
 import services.interfaces.IShoesService;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ShoesService implements IShoesService {
     private final IShoesRepository repo;
@@ -22,26 +23,37 @@ public class ShoesService implements IShoesService {
 
     @Override
     public List<Shoes> getAllShoes() {
-        return repo.getAllShoes();
+        return repo.getAllShoes().stream()
+                .filter(shoe -> shoe.getAvailability() == Availability.IN_STOCK)
+                .toList();
     }
+
 
     @Override
     public boolean addShoe(String brand, String material, String color, String seasonOfShoes, boolean gender, int size, int price, String availability) {
-        if (price <= 0) {
-            throw new IllegalArgumentException("Price must be greater than 0!");
-        }
-        if (size <= 0) {
-            throw new IllegalArgumentException("Size must be greater than 0!");
-        }
-        try {
-            Material materialEnum = Material.valueOf(material.toUpperCase());
-            Season seasonEnum = Season.valueOf(seasonOfShoes.toUpperCase());
-            Availability availabilityEnum = Availability.valueOf(availability.toUpperCase());
+        if (price <= 0) throw new IllegalArgumentException("Price must be greater than 0!");
+        if (size <= 0) throw new IllegalArgumentException("Size must be greater than 0!");
 
-            Shoes shoe = new Shoes(gender, brand, materialEnum, seasonEnum, color, size, price, availabilityEnum);
-            return repo.addShoe(shoe);
+        try {
+            Material materialEnum = Stream.of(Material.values())
+                    .filter(m -> m.name().equalsIgnoreCase(material))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid material type!"));
+
+            Season seasonEnum = Stream.of(Season.values())
+                    .filter(s -> s.name().equalsIgnoreCase(seasonOfShoes))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid season type!"));
+
+            Availability availabilityEnum = Stream.of(Availability.values())
+                    .filter(a -> a.name().equalsIgnoreCase(availability))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid availability type!"));
+
+            return repo.addShoe(new Shoes(gender, brand, materialEnum, seasonEnum, color, size, price, availabilityEnum));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid material, season, or availability type!");
         }
     }
+
 }

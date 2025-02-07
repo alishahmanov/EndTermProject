@@ -1,6 +1,8 @@
 package controllers;
+
 import exceptions.ClientNotFoundException;
 import models.Client;
+import models.enums.Role;
 import controllers.interfaces.IClientController;
 import repositories.interfaces.IClientRepository;
 
@@ -14,18 +16,23 @@ public class ClientController implements IClientController {
     }
 
     public String addClient(String name, String email, String password, boolean gender, int size, int amountOfMoney) {
+        if (name == null || name.trim().isEmpty()) {
+            return "Name cannot be empty!";
+        }
+        if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
+            return "Invalid email format!";
+        }
         if (size <= 0) {
             return "Size must be greater than 0!";
         }
-
         if (amountOfMoney < 0) {
             return "Amount of money cannot be negative!";
         }
 
-        Client client = new Client(name, email, password, gender, size, amountOfMoney);
+        Client client = new Client(name, email, password, Role.CLIENT, gender, size, amountOfMoney);
         boolean created = repo.addClient(client);
 
-        return (created ? "Success" : "Fail");
+        return created ? "Success" : "Fail";
     }
 
     public String getAllClients() {
@@ -48,5 +55,4 @@ public class ClientController implements IClientController {
                 .map(Client::toString)
                 .orElseThrow(() -> new ClientNotFoundException(email));
     }
-
 }

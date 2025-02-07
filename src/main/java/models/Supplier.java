@@ -1,5 +1,7 @@
 package models;
+import models.enums.Role;
 public class Supplier extends User {
+    private Long id;
     private String brandofshoes;
     private String countryOfOrigin;
     private int deliveryCost;
@@ -8,13 +10,20 @@ public class Supplier extends User {
         super();
     }
 
-    public Supplier(String brandofshoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
-        super(name, email, password);
-       setBrandofshoes(brandofshoes);
-       setCountryOfOrigin(countryOfOrigin);
-       setDeliveryCost(deliveryCost);
+    public Supplier(Long id, String name, String email, String password, String brandOfShoes, String countryOfOrigin, int deliveryCost, Role role) {
+        super(name, email, password, role);
+        this.id = id;
+        this.brandofshoes = brandOfShoes;
+        this.countryOfOrigin = countryOfOrigin;
+        this.deliveryCost = deliveryCost;
     }
 
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getBrandofshoes() {
         return brandofshoes;
     }

@@ -2,6 +2,7 @@ package services;
 
 import exceptions.SupplierNotFoundException;
 import models.Supplier;
+import models.enums.Role;
 import repositories.interfaces.ISupplierRepository;
 import services.interfaces.ISupplierService;
 
@@ -35,7 +36,7 @@ public class SupplierService implements ISupplierService {
             throw new IllegalArgumentException("Delivery cost cannot be negative!");
         }
 
-        Supplier supplier = new Supplier(brandOfShoes, countryOfOrigin, name, email, deliveryCost, password);
+        Supplier supplier = new Supplier(null, name, email, password, brandOfShoes, countryOfOrigin, deliveryCost, Role.SUPPLIER);
         return repo.addSupplier(supplier);
     }
 }

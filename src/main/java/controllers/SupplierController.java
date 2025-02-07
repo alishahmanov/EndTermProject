@@ -1,6 +1,8 @@
 package controllers;
+
 import exceptions.SupplierNotFoundException;
 import models.Supplier;
+import models.enums.Role;
 import controllers.interfaces.ISupplierController;
 import repositories.interfaces.ISupplierRepository;
 
@@ -13,17 +15,20 @@ public class SupplierController implements ISupplierController {
         this.repo = repo;
     }
 
+    @Override
     public String addSupplier(String brandOfShoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
         if (deliveryCost < 0) {
             return "Delivery cost cannot be negative!";
         }
 
-        Supplier supplier = new Supplier(brandOfShoes, countryOfOrigin, name, email, deliveryCost, password);
+        // ✅ Исправленный порядок аргументов
+        Supplier supplier = new Supplier(null, name, email, password, brandOfShoes, countryOfOrigin, deliveryCost, Role.SUPPLIER);
         boolean created = repo.addSupplier(supplier);
 
-        return (created ? "Success" : "Fail");
+        return created ? "Success" : " Fail";
     }
 
+    @Override
     public String getAllSuppliers() {
         List<Supplier> suppliers = repo.getAllSuppliers();
 
@@ -39,10 +44,10 @@ public class SupplierController implements ISupplierController {
         return response.toString();
     }
 
+    @Override
     public String getSupplierByEmail(String email) {
         return repo.findByEmail(email)
                 .map(Supplier::toString)
                 .orElseThrow(() -> new SupplierNotFoundException(email));
     }
-
 }

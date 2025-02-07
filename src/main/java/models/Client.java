@@ -1,6 +1,8 @@
 package models;
+import models.enums.Role;
 
 public class Client extends User {
+    private Long id;
     private int amountOfMoney;
     private boolean gender;
     private int size;
@@ -9,18 +11,27 @@ public class Client extends User {
         super();
     }
 
-    public Client(String name, String email, String password, boolean gender, int size, int amountOfMoney) {
-        super(name, email, password);
+    public Client(Long id, String name, String email, String password, Role role, boolean gender, int size, int amountOfMoney) {
+        super(name, email, password, role);
+        setId(id);
         setSize(size);
         setGender(gender);
         setAmountOfMoney(amountOfMoney);
     }
 
-    public Client(String name, String email, String password, boolean gender, int size) {
-        super(name, email, password);
+    public Client(String name, String email, String password, Role role, boolean gender, int size, int amountOfMoney) {
+        super(name, email, password, role);
         setSize(size);
         setGender(gender);
         this.amountOfMoney = 0;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getAmountOfMoney() {

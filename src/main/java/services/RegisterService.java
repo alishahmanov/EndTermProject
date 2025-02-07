@@ -2,6 +2,7 @@ package services;
 
 import models.Client;
 import models.Supplier;
+import models.enums.Role;
 import repositories.interfaces.IClientRepository;
 import repositories.interfaces.ISupplierRepository;
 import services.interfaces.IRegisterService;
@@ -29,7 +30,7 @@ public class RegisterService implements IRegisterService {
             throw new IllegalArgumentException("Amount of money cannot be negative!");
         }
 
-        Client client = new Client(name, email, password, gender, size, amountOfMoney);
+        Client client = new Client(name, email, password, Role.CLIENT, gender, size, amountOfMoney);
         boolean created = clientRepo.addClient(client);
         return created ? "Client registered successfully!" : "Failed to register client!";
     }
@@ -44,7 +45,7 @@ public class RegisterService implements IRegisterService {
             throw new IllegalArgumentException("Delivery cost cannot be negative!");
         }
 
-        Supplier supplier = new Supplier(brandOfShoes, countryOfOrigin, name, email, deliveryCost, password);
+        Supplier supplier = new Supplier(null, name, email, password, brandOfShoes, countryOfOrigin, deliveryCost, Role.SUPPLIER);
         boolean created = supplierRepo.addSupplier(supplier);
         return created ? "Supplier registered successfully!" : "Failed to register supplier!";
     }
