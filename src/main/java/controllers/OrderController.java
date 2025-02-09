@@ -19,16 +19,16 @@ public class OrderController implements IOrderController {
     @Override
     public String createOrder(Client client, List<Shoes> items) {
         boolean created = orderService.createOrder(client, items);
-        return created ? "✅ Order created successfully!" : "❌ Failed to create order.";
+        return created ? "Order created successfully!" : "Failed to create order.";
     }
 
     @Override
     public String getOrderById(Long id) {
         try {
             Order order = orderService.getOrderById(id);
-            return order.toString(); // ✅ Теперь возвращает Order.toString()
+            return order.toString();
         } catch (Exception e) {
-            return "❌ Order not found!";
+            return "Order not found!";
         }
     }
 
@@ -42,7 +42,7 @@ public class OrderController implements IOrderController {
     public String deleteOrderById(Long id, User user) {
         try {
             boolean deleted = orderService.deleteOrderById(id, user);
-            return deleted ? "✅ Order deleted successfully." : "❌ Failed to delete order.";
+            return deleted ? "Order deleted successfully." : "Failed to delete order.";
         } catch (SecurityException e) {
             return e.getMessage();
         }
