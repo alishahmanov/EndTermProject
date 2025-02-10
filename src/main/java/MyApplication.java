@@ -165,7 +165,7 @@ public class MyApplication {
         System.out.println("Available sneakers:");
         System.out.println(shoesController.getAllShoes());
 
-        System.out.print("Enter the IDs of the sneakers you want to buy (comma separated): ");
+        System.out.print("Enter the IDs of the sneakers you want to buy: ");
         String[] ids = scanner.nextLine().split(",");
         List<Shoes> shoesList = new ArrayList<>();
 
