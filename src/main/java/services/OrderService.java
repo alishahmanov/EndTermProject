@@ -1,6 +1,7 @@
 package services;
 
 import exceptions.OrderNotFoundException;
+import factorieses.OrderFactory;
 import models.Client;
 import models.Order;
 import models.Shoes;
@@ -9,21 +10,16 @@ import models.enums.Role;
 import repositories.interfaces.IOrderRepository;
 import services.interfaces.IOrderService;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.EnumSet;
 
 public class OrderService implements IOrderService {
     private final IOrderRepository repo;
-
-    // Разрешённые роли для удаления заказа
-    private static final EnumSet<Role> DELETE_ALLOWED_ROLES = EnumSet.of(Role.ADMIN, Role.MANAGER);
+    private static final EnumSet<Role> DELETE_ALLOWED_ROLES = EnumSet.of(Role.ADMIN);
 
     public OrderService(IOrderRepository repo) {
         this.repo = repo;
     }
-
 
     @Override
     public Order getOrderById(Long id) {
@@ -31,12 +27,10 @@ public class OrderService implements IOrderService {
                 .orElseThrow(() -> new OrderNotFoundException(id));
     }
 
-
     @Override
     public List<Order> getAllOrders() {
         return repo.getAllOrders();
     }
-
 
     @Override
     public boolean createOrder(Client client, List<Shoes> items) {
@@ -47,14 +41,9 @@ public class OrderService implements IOrderService {
             throw new IllegalArgumentException("Order must contain at least one item.");
         }
 
-        int totalPrice = items.stream()
-                .mapToInt(Shoes::getPrice)
-                .sum();
-
-        Order order = new Order(null, client, items, "Pending");
+        Order order = OrderFactory.createOrder(client, items);
         return repo.addOrder(order);
     }
-
 
     @Override
     public boolean deleteOrderById(Long id, User user) {

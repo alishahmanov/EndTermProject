@@ -5,7 +5,7 @@ import models.Client;
 import models.Order;
 import models.Shoes;
 import repositories.interfaces.IOrderRepository;
-
+import factorieses.ShoesFactory;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,30 +69,32 @@ public class OrderRepository implements IOrderRepository {
 
             if (rs.next()) {
                 Client client = new Client(
-                        rs.getLong("client_id"),   // Теперь передаем ID клиента
                         rs.getString("client_name"),
                         rs.getString("client_email"),
                         "",
+                        models.enums.Role.CLIENT,
                         rs.getBoolean("gender"),
                         rs.getInt("size"),
                         rs.getInt("amountofmoney")
                 );
 
 
+
                 List<Shoes> shoesList = new ArrayList<>();
                 do {
-                    Shoes shoe = new Shoes(
+                    Shoes shoe = ShoesFactory.createShoes(
                             rs.getBoolean("gender"),
                             rs.getString("brand"),
-                            models.enums.Material.valueOf(rs.getString("material")),
-                            models.enums.Season.valueOf(rs.getString("season")),
+                            rs.getString("material"), // Передаём как строку, фабрика сама обработает
+                            rs.getString("season"),  // Передаём как строку, фабрика сама обработает
                             rs.getString("color"),
                             rs.getInt("shoe_size"),
                             rs.getInt("price"),
-                            models.enums.Availability.IN_STOCK
+                            rs.getString("availability") // Если это строка, фабрика обработает
                     );
                     shoesList.add(shoe);
                 } while (rs.next());
+
 
                 Order order = new Order(
                         rs.getLong("order_id"),

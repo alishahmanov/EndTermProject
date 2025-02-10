@@ -4,6 +4,7 @@ import models.enums.Season;
 import models.enums.Availability;
 
 public class Shoes extends Products {
+    private Long id;
     private String brand;
     private Material material;
     private String color;
@@ -14,13 +15,22 @@ public class Shoes extends Products {
         super();
     }
 
-    public Shoes(boolean gender, String brand, Material material, Season seasonOfShoes, String color, int size, int price, Availability availability) {
+    public Shoes(Long id, boolean gender, String brand, Material material, Season seasonOfShoes, String color, int size, int price, Availability availability) {
         super(size, price, availability);
+        setId(id);
         setBrand(brand);
         setMaterial(material);
         setSeasonOfShoes(seasonOfShoes);
         setGender(gender);
         setColor(color);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBrand() {

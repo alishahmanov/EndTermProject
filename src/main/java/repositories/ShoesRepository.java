@@ -1,6 +1,6 @@
 package repositories;
 import models.enums.*;
-
+import factorieses.ShoesFactory;
 import data.interfaces.IDB;
 import models.Shoes;
 import repositories.interfaces.IShoesRepository;
@@ -41,15 +41,15 @@ public class ShoesRepository implements IShoesRepository {
                 Season season = Season.valueOf(seasonStr);
                 Availability availability = Availability.valueOf(availabilityStr);
 
-                Shoes shoe = new Shoes(
-                        gender,
-                        brand,
-                        material,
-                        season,
-                        color,
-                        size,
-                        price,
-                        availability
+                Shoes shoe = ShoesFactory.createShoes(
+                        rs.getBoolean("gender"),
+                        rs.getString("brand"),
+                        rs.getString("material"),
+                        rs.getString("season_of_shoes"),
+                        rs.getString("color"),
+                        rs.getInt("size"),
+                        rs.getInt("price"),
+                        rs.getString("availability")
                 );
 
                 return Optional.of(shoe);
@@ -72,32 +72,20 @@ public class ShoesRepository implements IShoesRepository {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                boolean gender = rs.getBoolean("gender");
-                String brand = rs.getString("brand");
-                String materialStr = rs.getString("material");
-                String seasonStr = rs.getString("season_of_shoes");
-                String color = rs.getString("color");
-                int size = rs.getInt("size");
-                int price = rs.getInt("price");
-                String availabilityStr = rs.getString("availability");
-
-                Material material = Material.valueOf(materialStr);
-                Season season = Season.valueOf(seasonStr);
-                Availability availability = Availability.valueOf(availabilityStr);
-
-                Shoes shoe = new Shoes(
-                        gender,
-                        brand,
-                        material,
-                        season,
-                        color,
-                        size,
-                        price,
-                        availability
+                Shoes shoe = ShoesFactory.createShoes(
+                        rs.getBoolean("gender"),
+                        rs.getString("brand"),
+                        rs.getString("material"),
+                        rs.getString("season_of_shoes"),
+                        rs.getString("color"),
+                        rs.getInt("size"),
+                        rs.getInt("price"),
+                        rs.getString("availability")
                 );
 
                 shoesList.add(shoe);
             }
+
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException("Database error: " + e.getMessage());
         }

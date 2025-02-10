@@ -2,52 +2,34 @@ package controllers;
 
 import exceptions.SupplierNotFoundException;
 import models.Supplier;
-import models.enums.Role;
-import controllers.interfaces.ISupplierController;
-import repositories.interfaces.ISupplierRepository;
+import services.interfaces.ISupplierService;
 
 import java.util.List;
 
-public class SupplierController implements ISupplierController {
-    private final ISupplierRepository repo;
+public class SupplierController {
+    private final ISupplierService service;
 
-    public SupplierController(ISupplierRepository repo) {
-        this.repo = repo;
+    public SupplierController(ISupplierService service) {
+        this.service = service;
     }
 
-    @Override
     public String addSupplier(String brandOfShoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
-        if (deliveryCost < 0) {
-            return "Delivery cost cannot be negative!";
-        }
+        if (brandOfShoes == null || brandOfShoes.trim().isEmpty()) return " Brand cannot be empty!";
+        if (countryOfOrigin == null || countryOfOrigin.trim().isEmpty()) return " Country cannot be empty!";
+        if (name == null || name.trim().isEmpty()) return " Name cannot be empty!";
+        if (email == null || !email.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) return " Invalid email format!";
+        if (deliveryCost < 0) return " Delivery cost cannot be negative!";
 
-        // ✅ Исправленный порядок аргументов
-        Supplier supplier = new Supplier(null, name, email, password, brandOfShoes, countryOfOrigin, deliveryCost, Role.SUPPLIER);
-        boolean created = repo.addSupplier(supplier);
-
-        return created ? "Success" : " Fail";
+        boolean created = service.addSupplier(brandOfShoes, countryOfOrigin, name, email, deliveryCost, password);
+        return created ? "Supplier added successfully!" : " Failed to add supplier.";
     }
 
-    @Override
-    public String getAllSuppliers() {
-        List<Supplier> suppliers = repo.getAllSuppliers();
-
-        if (suppliers.isEmpty()) {
-            return "No suppliers found!";
-        }
-
-        StringBuilder response = new StringBuilder();
-        for (Supplier supplier : suppliers) {
-            response.append(supplier).append("\n");
-        }
-
-        return response.toString();
+    public List<Supplier> getAllSuppliers() {
+        return service.getAllSuppliers();
     }
 
-    @Override
-    public String getSupplierByEmail(String email) {
-        return repo.findByEmail(email)
-                .map(Supplier::toString)
+    public Supplier getSupplierByEmail(String email) {
+        return service.getSupplierByEmail(email)
                 .orElseThrow(() -> new SupplierNotFoundException(email));
     }
 }

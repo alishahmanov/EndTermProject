@@ -1,12 +1,12 @@
 package services;
 
-import exceptions.SupplierNotFoundException;
+import factorieses.SupplierFactory;
 import models.Supplier;
-import models.enums.Role;
 import repositories.interfaces.ISupplierRepository;
 import services.interfaces.ISupplierService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SupplierService implements ISupplierService {
     private final ISupplierRepository repo;
@@ -16,9 +16,8 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public Supplier getSupplierByEmail(String email) {
-        return repo.findByEmail(email)
-                .orElseThrow(() -> new SupplierNotFoundException(email));
+    public Optional<Supplier> getSupplierByEmail(String email) {
+        return repo.findByEmail(email);
     }
 
     @Override
@@ -27,16 +26,8 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public boolean addSupplier(String brandOfShoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
-        if (repo.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("Supplier with this email already exists!");
-        }
-
-        if (deliveryCost < 0) {
-            throw new IllegalArgumentException("Delivery cost cannot be negative!");
-        }
-
-        Supplier supplier = new Supplier(null, name, email, password, brandOfShoes, countryOfOrigin, deliveryCost, Role.SUPPLIER);
+    public boolean addSupplier(String brandofshoes, String countryOfOrigin, String name, String email, int deliveryCost, String password) {
+        Supplier supplier = SupplierFactory.createSupplier(name, email, password, brandofshoes, countryOfOrigin, deliveryCost);
         return repo.addSupplier(supplier);
     }
 }

@@ -54,7 +54,7 @@ public class ClientRepository implements IClientRepository {
 
     @Override
     public boolean addClient(Client client) {
-        String sql = "INSERT INTO clients(name, email, password, gender, size, amountofmoney) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO clients(name, email, password, role, gender, size, amountofmoney) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = db.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {

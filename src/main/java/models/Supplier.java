@@ -11,7 +11,7 @@ public class Supplier extends User {
     }
 
     public Supplier(Long id, String name, String email, String password, String brandOfShoes, String countryOfOrigin, int deliveryCost, Role role) {
-        super(name, email, password, role);
+        super(name, email, password, Role.SUPPLIER);
         this.id = id;
         this.brandofshoes = brandOfShoes;
         this.countryOfOrigin = countryOfOrigin;
