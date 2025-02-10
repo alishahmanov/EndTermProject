@@ -25,7 +25,7 @@ public class ShoesService implements IShoesService {
 
     @Override
     public String getAllShoes() {
-        List<Shoes> shoes = repo.getAllShoes(); // Получаем список обуви из БД
+        List<Shoes> shoes = repo.getAllShoes();
 
         if (shoes.isEmpty()) return "No sneakers found!";
 

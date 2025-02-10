@@ -85,12 +85,12 @@ public class OrderRepository implements IOrderRepository {
                     Shoes shoe = ShoesFactory.createShoes(
                             rs.getBoolean("gender"),
                             rs.getString("brand"),
-                            rs.getString("material"), // Передаём как строку, фабрика сама обработает
-                            rs.getString("season"),  // Передаём как строку, фабрика сама обработает
+                            rs.getString("material"),
+                            rs.getString("season"),
                             rs.getString("color"),
                             rs.getInt("shoe_size"),
                             rs.getInt("price"),
-                            rs.getString("availability") // Если это строка, фабрика обработает
+                            rs.getString("availability")
                     );
                     shoesList.add(shoe);
                 } while (rs.next());

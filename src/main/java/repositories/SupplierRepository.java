@@ -87,13 +87,13 @@ public class SupplierRepository implements ISupplierRepository {
             st.setString(4, supplier.getBrandofshoes());
             st.setString(5, supplier.getCountryOfOrigin());
             st.setInt(6, supplier.getDeliveryCost());
-            st.setString(7, supplier.getRole().name()); // Теперь role правильно вставляется в таблицу
+            st.setString(7, supplier.getRole().name());
 
             int affectedRows = st.executeUpdate();
             if (affectedRows > 0) {
                 ResultSet generatedKeys = st.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    supplier.setId(generatedKeys.getLong(1)); // Устанавливаем ID поставщика
+                    supplier.setId(generatedKeys.getLong(1));
                     return true;
                 }
             }

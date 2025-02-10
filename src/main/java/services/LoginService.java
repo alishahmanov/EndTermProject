@@ -36,8 +36,6 @@ public class LoginService implements ILoginService {
                 return "Incorrect password for supplier!";
             }
         }
-
-        // Если пользователь не найден в обеих таблицах
         throw new RuntimeException("User with email: " + email + " not found!");
     }
 }
